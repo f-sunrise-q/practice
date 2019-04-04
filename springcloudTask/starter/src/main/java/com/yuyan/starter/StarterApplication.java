@@ -2,6 +2,7 @@ package com.yuyan.starter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication(scanBasePackages = {"com.yuyan"})
 @ComponentScan({"com.yuyan"})
 @EnableTask
+@EnableBatchProcessing
 public class StarterApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(StarterApplication.class);
@@ -32,4 +34,5 @@ public class StarterApplication {
 			log.info("running a task!!!!");
 		}
 	}
+
 }
