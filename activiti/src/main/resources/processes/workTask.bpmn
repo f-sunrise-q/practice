@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/testm1555595682492" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1555595682492" name="" targetNamespace="http://www.activiti.org/testm1555595682492" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="workTicketProcess" isClosed="false" isExecutable="true" processType="None">
+    <startEvent id="_2" name="StartEvent"/>
+    <userTask activiti:exclusive="true" id="workSignCreate" name="工作签发人创建作业"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="_4" name="ExclusiveGateway"/>
+    <userTask activiti:exclusive="true" id="workPermitCheck" name="工作许可人确认作业"/>
+    <endEvent id="_6" name="EndEvent"/>
+    <userTask activiti:exclusive="true" id="workLeaderCheck" name="工作负责人接收作业"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="_8" name="ExclusiveGateway"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="_9" name="ExclusiveGateway"/>
+    <userTask activiti:exclusive="true" id="workLeaderSign" name="工作负责人签到"/>
+    <userTask activiti:exclusive="true" id="workLeaderWorking" name="作业施工中"/>
+    <userTask activiti:exclusive="true" id="workPermitEnd" name="工作许可人确认完成"/>
+    <exclusiveGateway gatewayDirection="Unspecified" id="_14" name="ExclusiveGateway"/>
+    <sequenceFlow id="_15" sourceRef="_2" targetRef="workSignCreate"/>
+    <sequenceFlow id="_16" sourceRef="workSignCreate" targetRef="_4"/>
+    <sequenceFlow id="_17" sourceRef="_4" targetRef="workPermitCheck">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_18" sourceRef="workPermitCheck" targetRef="_8"/>
+    <sequenceFlow id="_19" sourceRef="_8" targetRef="workLeaderCheck">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_20" sourceRef="_8" targetRef="workSignCreate">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_21" sourceRef="workLeaderCheck" targetRef="_9"/>
+    <sequenceFlow id="_24" sourceRef="workLeaderSign" targetRef="workLeaderWorking"/>
+    <sequenceFlow id="_27" sourceRef="workPermitEnd" targetRef="_14"/>
+    <sequenceFlow id="_28" sourceRef="_14" targetRef="_6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_29" sourceRef="_4" targetRef="_6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_31" sourceRef="workLeaderWorking" targetRef="workPermitEnd"/>
+    <sequenceFlow id="_35" sourceRef="_14" targetRef="workLeaderWorking">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_3" sourceRef="_9" targetRef="workPermitCheck">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==0}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_5" sourceRef="_9" targetRef="workLeaderSign">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${check==1}]]></conditionExpression>
+    </sequenceFlow>
+    <textAnnotation id="_30" textFormat="text/plain">
+      <text>工作许可人未确认时删除</text>
+    </textAnnotation>
+    <textAnnotation id="_32" textFormat="text/plain">
+      <text>确认完成时被驳回</text>
+    </textAnnotation>
+    <textAnnotation id="_33" textFormat="text/plain">
+      <text>工作负责人拒收</text>
+    </textAnnotation>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#FFFFFF;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="workTicketProcess">
+      <bpmndi:BPMNShape bpmnElement="_2" id="Shape-_2">
+        <dc:Bounds height="32.0" width="32.0" x="335.0" y="75.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workSignCreate" id="Shape-workSignCreate">
+        <dc:Bounds height="55.0" width="135.0" x="305.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="135.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_4" id="Shape-_4" isMarkerVisible="false">
+        <dc:Bounds height="32.0" width="32.0" x="340.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workPermitCheck" id="Shape-workPermitCheck">
+        <dc:Bounds height="55.0" width="135.0" x="325.0" y="370.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="135.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_6" id="Shape-_6">
+        <dc:Bounds height="32.0" width="32.0" x="1060.0" y="730.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workLeaderCheck" id="Shape-workLeaderCheck">
+        <dc:Bounds height="55.0" width="145.0" x="325.0" y="550.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="145.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_8" id="Shape-_8" isMarkerVisible="false">
+        <dc:Bounds height="32.0" width="32.0" x="360.0" y="475.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_9" id="Shape-_9" isMarkerVisible="false">
+        <dc:Bounds height="32.0" width="32.0" x="365.0" y="640.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workLeaderSign" id="Shape-workLeaderSign">
+        <dc:Bounds height="55.0" width="85.0" x="345.0" y="720.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workLeaderWorking" id="Shape-workLeaderWorking">
+        <dc:Bounds height="55.0" width="85.0" x="500.0" y="720.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="workPermitEnd" id="Shape-workPermitEnd">
+        <dc:Bounds height="55.0" width="85.0" x="725.0" y="720.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_14" id="Shape-_14" isMarkerVisible="false">
+        <dc:Bounds height="32.0" width="32.0" x="905.0" y="730.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_30" id="Shape-_30">
+        <dc:Bounds height="35.0" width="85.0" x="740.0" y="255.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="35.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_32" id="Shape-_32">
+        <dc:Bounds height="55.0" width="85.0" x="800.0" y="595.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="_33" id="Shape-_33">
+        <dc:Bounds height="55.0" width="85.0" x="145.0" y="430.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_35" id="BPMNEdge__35" sourceElement="_14" targetElement="workLeaderWorking">
+        <di:waypoint x="921.0" y="730.0"/>
+        <di:waypoint x="760.0" y="640.0"/>
+        <di:waypoint x="542.5" y="720.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_15" id="BPMNEdge__15" sourceElement="_2" targetElement="workSignCreate">
+        <di:waypoint x="351.0" y="107.0"/>
+        <di:waypoint x="351.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_17" id="BPMNEdge__17" sourceElement="_4" targetElement="workPermitCheck">
+        <di:waypoint x="356.0" y="327.0"/>
+        <di:waypoint x="356.0" y="370.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_16" id="BPMNEdge__16" sourceElement="workSignCreate" targetElement="_4">
+        <di:waypoint x="356.0" y="215.0"/>
+        <di:waypoint x="356.0" y="295.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_19" id="BPMNEdge__19" sourceElement="_8" targetElement="workLeaderCheck">
+        <di:waypoint x="376.0" y="507.0"/>
+        <di:waypoint x="376.0" y="550.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_18" id="BPMNEdge__18" sourceElement="workPermitCheck" targetElement="_8">
+        <di:waypoint x="376.0" y="425.0"/>
+        <di:waypoint x="376.0" y="475.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_20" id="BPMNEdge__20" sourceElement="_8" targetElement="workSignCreate">
+        <di:waypoint x="392.0" y="491.0"/>
+        <di:waypoint x="580.0" y="340.0"/>
+        <di:waypoint x="440.0" y="187.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_21" id="BPMNEdge__21" sourceElement="workLeaderCheck" targetElement="_9">
+        <di:waypoint x="381.0" y="605.0"/>
+        <di:waypoint x="381.0" y="640.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_24" id="BPMNEdge__24" sourceElement="workLeaderSign" targetElement="workLeaderWorking">
+        <di:waypoint x="430.0" y="747.5"/>
+        <di:waypoint x="500.0" y="747.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_28" id="BPMNEdge__28" sourceElement="_14" targetElement="_6">
+        <di:waypoint x="937.0" y="746.0"/>
+        <di:waypoint x="1060.0" y="746.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_27" id="BPMNEdge__27" sourceElement="workPermitEnd" targetElement="_14">
+        <di:waypoint x="810.0" y="747.5"/>
+        <di:waypoint x="905.0" y="746.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_29" id="BPMNEdge__29" sourceElement="_4" targetElement="_6">
+        <di:waypoint x="372.0" y="311.0"/>
+        <di:waypoint x="1075.0" y="525.0"/>
+        <di:waypoint x="1075.0" y="730.0312805773287"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="_9" targetElement="workPermitCheck">
+        <di:waypoint x="365.0" y="656.0"/>
+        <di:waypoint x="235.0" y="530.0"/>
+        <di:waypoint x="325.0" y="397.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_5" id="BPMNEdge__5" sourceElement="_9" targetElement="workLeaderSign">
+        <di:waypoint x="381.0" y="672.0"/>
+        <di:waypoint x="381.0" y="720.0"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_31" id="BPMNEdge__31" sourceElement="workLeaderWorking" targetElement="workPermitEnd">
+        <di:waypoint x="585.0" y="747.5"/>
+        <di:waypoint x="725.0" y="747.5"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

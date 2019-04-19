@@ -23,7 +23,7 @@ public class MyLeaveActivitiTest {
         //发布
         RepositoryService repositoryService = processEngine.getRepositoryService();
         DeploymentBuilder builder = repositoryService.createDeployment();
-        builder.addClasspathResource("jbpm/audit.bpmn");//bpmn文件的名称
+        builder.addClasspathResource("processes/audit.bpmn");//bpmn文件的名称
         builder.deploy();
 
         //启动
