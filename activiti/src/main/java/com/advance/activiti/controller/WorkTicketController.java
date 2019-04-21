@@ -2,6 +2,7 @@ package com.advance.activiti.controller;
 
 import com.advance.activiti.constant.WorkFlowStatus;
 import com.advance.activiti.dto.ProcessDealDto;
+import com.advance.activiti.service.WorkProcessDealService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
@@ -13,6 +14,7 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,9 @@ public class WorkTicketController {
 
     @Autowired
     private TaskService taskService;
+
+    @Autowired
+    private WorkProcessDealService workProcessDealService;
 
     /**
      * 启动作业票流程
@@ -129,6 +134,7 @@ public class WorkTicketController {
 
         Task task = taskService.createTaskQuery().processInstanceId(instanceId).singleResult();
 
+        taskService.setAssignee(task.getId(), personId);
 //        Task task = taskService.newTask(taskId);
         task.setOwner(personId);
         task.setDescription("工作签发人提交作业");
@@ -137,11 +143,9 @@ public class WorkTicketController {
 //        taskService.
         String taskId = task.getId();
 
-
-
         taskService.createAttachment("", taskId, instanceId, "msg", "创建作业并提交流程", "");
         taskService.saveTask(task);
-//        taskService.complete(taskId, map);
+        taskService.complete(taskId, map);
         return taskId;
     }
 
@@ -215,23 +219,35 @@ public class WorkTicketController {
      * @return
      */
     @GetMapping("/check2")
-    public String commitTaskByWorkLeader(ProcessDealDto processDealDto){
+    public String commitTaskByWorkLeader(ProcessDealDto processDealDto) throws Exception {
 //        String taskId = UUID.randomUUID().toString().replace("-", "");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("check", processDealDto.getCheck());
         map.put("personId", processDealDto.getPersonId());
+
+        if(Integer.valueOf(0).equals(processDealDto.getCheck())){
+            //驳回上一级
+            workProcessDealService.revoke(processDealDto);
+        }else {
 //        map.put("delete", false);
 
-        Task task = taskService.createTaskQuery().processInstanceId(processDealDto.getInstanceId()).singleResult();
+            Task task = taskService.createTaskQuery().processInstanceId(processDealDto.getInstanceId()).singleResult();
 
-        task.setDescription(WorkFlowStatus.getDescriptionByIndex(processDealDto.getNodeType()));
+            task.setDescription(WorkFlowStatus.getDescriptionByIndex(processDealDto.getNodeType()));
 
-        task.setAssignee(processDealDto.getPersonId());
+            task.setAssignee(processDealDto.getPersonId());
+
+
 //        taskService.
-        String taskId = task.getId();
-        taskService.saveTask(task);
-        taskService.createAttachment("", taskId, processDealDto.getInstanceId(), "msg", WorkFlowStatus.getDescriptionByIndex(processDealDto.getNodeType()), "");
-        taskService.complete(taskId, map);
-        return taskId;
+            String taskId = task.getId();
+            taskService.saveTask(task);
+            taskService.createAttachment("", taskId, processDealDto.getInstanceId(), "msg", WorkFlowStatus.getDescriptionByIndex(processDealDto.getNodeType()), "");
+            taskService.claim(taskId, processDealDto.getPersonId());
+            taskService.complete(taskId, map);
+//            return taskId;
+        }
+        return "success";
     }
+
+
 }
